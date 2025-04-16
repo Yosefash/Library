@@ -49,3 +49,24 @@ import uuid
 
 class BookInstance(models.Model):
     id=models.UUIDField(primary_key=True,default=uuid.uuid4)
+    book =models.ForeignKey(Book,on_delete=models.RESTRICT)
+    inprint=models.TextField(max_length=1000)
+    due_back=models.DateField(blank=True,null=True)
+    
+    loan_status=(
+        ('m','Maintenance',),
+        ('o','On loan',),
+        ('a','Available',),
+        ('r','Reserved',),
+    )
+    
+    status=models.CharField(max_length=20,choices=loan_status,default='m')
+    
+    class meta:
+        ordering=['due_back']
+    def __str__(self):
+        return f'{self.id} ({self.book.title})'
+
+ 
+    
+    
